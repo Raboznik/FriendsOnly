@@ -1,6 +1,5 @@
 package me.friendsonly.tests;
 
-import com.codeborne.selenide.Condition;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -8,7 +7,7 @@ import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.*;
 import static io.qameta.allure.Allure.step;
 
-public class FriendsOnlyRegistrationTests extends TestBase{
+public class FriendsOnlyRegistrationTests extends TestBase {
 
     /**
      * Список тестов на регистрацию :
@@ -27,27 +26,23 @@ public class FriendsOnlyRegistrationTests extends TestBase{
     @DisplayName("Test that without the accepted Terms of Service and Privacy policy" +
             " it is impossible to continue registration")
     @Test
-    void testForTosAndPp() {
+    void testForRegistrationWithoutAcceptedTermsAndPolicy() {
         step("Open main page", () ->
                 open(baseUrl));
-
         step("Close I'm under 18 window", () -> {
             $(".accept-adults-modal__inner").shouldBe(visible);
-//            $(".accept-adults-modal__button accept-adults-modal__button--accept").click();
-            $x("//*[@id=\"__layout\"]/div/div[2]/div[3]/div/div[4]/div[1]").click();
+            $(".accept-adults-modal__button--accept").click();
         });
-        //.accept-adults-modal__inner
-        //.accept-adults-modal__button accept-adults-modal__button--accept
         step("Click on Log in button", () -> {
             $(".menuItem.login").click();
             $(".auth.mobile").shouldBe(visible);
         });
         step("Click on Registration button", () ->
-            $x("//*[@id=\"__layout\"]/div/div[2]/div[3]/div/div/div/div/span[2]").click());
+                $(".lineRow span", 1).click());
         step("Registration form should be visible", () ->
                 $(".modalWrap.active").shouldBe(visible));
         step("Click on At 1 click button", () ->
-            $(".login__button--one").click());
+                $(".login__button--one").click());
         step("Click on Google button", () ->
                 $(".login__button--google").click());
         step("Click on TikTok button", () ->
@@ -60,9 +55,132 @@ public class FriendsOnlyRegistrationTests extends TestBase{
                 $(".login__button--phone").click());
         step("Registration form should be visible", () ->
                 $(".modalWrap.active").shouldBe(visible));
+    }
+
+    @DisplayName("Test that without the accepted Terms of Service it is impossible to continue registration")
+    @Test
+    void testForRegistrationWithoutAcceptedTermsOfService() {
+        step("Open main page", () ->
+                open(baseUrl));
+        step("Close I'm under 18 window", () -> {
+            $(".accept-adults-modal__inner").shouldBe(visible);
+            $(".accept-adults-modal__button--accept").click();
+        });
+        step("Click on Log in button", () -> {
+            $(".menuItem.login").click();
+            $(".auth.mobile").shouldBe(visible);
+        });
+        step("Click on Registration button", () ->
+                $(".lineRow span", 1).click());
+        step("Registration form should be visible", () ->
+                $(".modalWrap.active").shouldBe(visible));
+        step("Accept Privacy Policy only", () ->
+                $(".acceptBox", 1).click());
+        step("Click on At 1 click button", () ->
+                $(".login__button--one").click());
+        step("Click on Google button", () ->
+                $(".login__button--google").click());
+        step("Click on TikTok button", () ->
+                $(".login__button--tik-tok").click());
+        step("Click on Telegram button", () ->
+                $(".login__button--tg").click());
+        step("Click on Email button", () ->
+                $(".login__button--email").click());
+        step("Click on Phone button", () ->
+                $(".login__button--phone").click());
+        step("Registration form should be visible", () ->
+                $(".modalWrap.active").shouldBe(visible));
+    }
+
+    @DisplayName("Test that without the accepted Privacy Policy it is impossible to continue registration")
+    @Test
+    void testForRegistrationWithoutAcceptedPrivacyPolicy() {
+        step("Open main page", () ->
+                open(baseUrl));
+        step("Close I'm under 18 window", () -> {
+            $(".accept-adults-modal__inner").shouldBe(visible);
+            $(".accept-adults-modal__button--accept").click();
+        });
+        step("Click on Log in button", () -> {
+            $(".menuItem.login").click();
+            $(".auth.mobile").shouldBe(visible);
+        });
+        step("Click on Registration button", () ->
+                $(".lineRow span", 1).click());
+        step("Registration form should be visible", () ->
+                $(".modalWrap.active").shouldBe(visible));
+        step("Accept Term of Service only", () ->
+                $(".acceptBox", 0).click());
+        step("Click on At 1 click button", () ->
+                $(".login__button--one").click());
+        step("Click on Google button", () ->
+                $(".login__button--google").click());
+        step("Click on TikTok button", () ->
+                $(".login__button--tik-tok").click());
+        step("Click on Telegram button", () ->
+                $(".login__button--tg").click());
+        step("Click on Email button", () ->
+                $(".login__button--email").click());
+        step("Click on Phone button", () ->
+                $(".login__button--phone").click());
+        step("Registration form should be visible", () ->
+                $(".modalWrap.active").shouldBe(visible));
+    }
+
+    @DisplayName("Test for click on login button. It's should go back to login page")
+    @Test
+    void testForButtonLogIn() {
+        step("Open main page", () ->
+                open(baseUrl));
+        step("Close I'm under 18 window", () -> {
+            $(".accept-adults-modal__inner").shouldBe(visible);
+            $(".accept-adults-modal__button--accept").click();
+        });
+        step("Click on Log in button", () -> {
+            $(".menuItem.login").click();
+            $(".content h2").shouldBe(visible).shouldHave(text("Войти в аккаунт"));
+        });
+        step("Click on Registration button", () -> {
+            $(".lineRow span", 1).click();
+            $(".content h2").shouldBe(visible).shouldHave(text("Регистрация"));
+        });
+        step("Click on Log in button again", () -> {
+            $(".lineRow span", 1).click();
+            $(".content h2").shouldBe(visible).shouldHave(text("Войти в аккаунт"));
+        });
+    }
+
+    @DisplayName("Test for At 1 click registration")
+    @Test
+    void testForAtOneClickRegistration() {
+        step("Open main page", () ->
+                open(baseUrl));
+        step("Close I'm under 18 window", () -> {
+            $(".accept-adults-modal__inner").shouldBe(visible);
+            $(".accept-adults-modal__button--accept").click();
+        });
+        step("Click on Log in button", () -> {
+            $(".menuItem.login").click();
+            $(".auth.mobile").shouldBe(visible);
+        });
+        step("Click on Registration button", () ->
+                $(".lineRow span", 1).click());
+        step("Registration form should be visible", () ->
+                $(".modalWrap.active").shouldBe(visible));
+        step("Accept Privacy Policy", () ->
+                $(".acceptBox", 1).click());
+        step("Accept Term of Service", () ->
+                $(".acceptBox", 0).click());
+        step("Click on At 1 click button", () ->
+                $(".login__button--one").click());
+
+
 
 
     }
 
 
 }
+
+
+
